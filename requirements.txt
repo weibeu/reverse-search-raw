@@ -1,2 +1,2 @@
-SQLAlchemy
+sqlalchemy[asyncio]
 python-dotenv

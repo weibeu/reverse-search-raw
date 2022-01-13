@@ -1,6 +1,7 @@
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_scoped_session
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Column, DateTime
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
-from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy import create_engine, Column, DateTime
 
 from . import config
 
@@ -19,25 +20,25 @@ def __get_connection_string():
 
 def get_database_engine():
     connection_string = __get_connection_string()
-    return create_engine(connection_string, **config.POSTGRESQL["pool"])
+    return create_async_engine(connection_string, **config.POSTGRESQL["pool"])
 
 
-Session = sessionmaker(bind=get_database_engine())
+Session = sessionmaker(bind=get_database_engine(), class_=AsyncSession)
 
 
 class SessionContext(object):
 
     def __init__(self):
-        self._session_factory = scoped_session(Session)
+        self._session_factory = async_scoped_session(Session)
         self.session = self._session_factory()
 
-    def __enter__(self):
+    async def __aenter__(self):
         return self.session
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.session.commit()
-        self.session.close()
-        self._session_factory.remove()
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        await self.session.commit()
+        await self.session.close()
+        await self._session_factory.remove()
 
 
 class __ModelMeta(DeclarativeMeta):
