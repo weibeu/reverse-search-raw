@@ -23,14 +23,9 @@ class Elasticsearch(elasticsearch.Elasticsearch):
             reader = csv.DictReader(file)
             bulk(self, reader, index=index)
 
-    # def get_resource(self, name, cls, session, **kwargs):
-    #     result = self.search({
-    #         "query": {
-    #             "match": {"name": name, **kwargs}
-    #         }
-    #     }, index=cls.ELASTICSEARCH_INDEX)
-    #     try:
-    #         document = result["hits"]["hits"][0]
-    #     except IndexError:
-    #         return
-    #     return session.query(cls).filter_by(id=document["_id"]).first()
+    def get_hits(self, index, **field_queries):
+        result = self.search(index=index, query={
+            "match": {
+                fn: {"query": query} for fn, query in field_queries.items()
+            }})
+        return result["hits"]["hits"]
