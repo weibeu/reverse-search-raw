@@ -8,8 +8,8 @@ import os
 def bulk_index_to_elasticsearch():
     # shutil.rmtree("exports", ignore_errors=True)
     # os.makedirs("exports", exist_ok=True)
-    title_akas_filepath = os.path.abspath("exports/title.akas.csv")
-    name_basics_filepath = os.path.abspath("exports/name.basics.csv")
+    title_akas_filepath = os.path.abspath("datasets/exports/title.akas.csv")
+    name_basics_filepath = os.path.abspath("datasets/exports/name.basics.csv")
 
     # cur = conn.cursor()
     # cur.execute("COPY (SELECT titleId, title FROM title_akas) TO '{}' WITH CSV".format(title_akas_filepath))
