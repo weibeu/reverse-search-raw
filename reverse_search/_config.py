@@ -8,7 +8,7 @@ class BaseConfig(object):
         "db": "weibeu-reverse-search",
         "host": "localhost",
         "port": 5432,
-        "username": None,
+        "username": "weibeu",
         "password": None,
         "pool": {
             "pool_size": 40,
