@@ -16,6 +16,9 @@ class BaseConfig(object):
             "pool_timeout": 60,
         }
     }
+    ELASTICSEARCH = {
+        "hosts": ["127.0.0.1:9200", ],
+    }
 
 
 class DevelopmentConfig(BaseConfig):
