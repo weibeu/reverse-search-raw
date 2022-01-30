@@ -1,8 +1,10 @@
+from reverse_search.elasticsearch.index import bulk_index_to_elasticsearch
 from reverse_search.db.migrate import make_migrations
 
 
 COMMANDS = {
     "migrate": make_migrations,
+    "index": bulk_index_to_elasticsearch,
 }
 
 
