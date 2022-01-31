@@ -84,6 +84,17 @@ def make_migrations():
         )
         """
     )
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS title_subtitles (
+            titleId TEXT,
+            index_ INTEGER,
+            start_ TEXT,
+            end_ TEXT,
+            dialogue TEXT
+        )
+        """
+    )
 
     conn.commit()
     cur.close()
