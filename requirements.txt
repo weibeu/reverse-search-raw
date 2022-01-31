@@ -2,3 +2,4 @@ python-dotenv
 elasticsearch
 Flask
 pysrt
+flask-cors
