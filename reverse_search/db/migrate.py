@@ -96,5 +96,14 @@ def make_migrations():
         """
     )
 
+    cur.execute("CREATE INDEX ON title_akas (titleId)")
+    cur.execute("CREATE INDEX ON title_basics (tconst)")
+    cur.execute("CREATE INDEX ON title_crew (tconst)")
+    cur.execute("CREATE INDEX ON episode (tconst, parentTconst)")
+    cur.execute("CREATE INDEX ON principals (tconst, ordering, nconst)")
+    cur.execute("CREATE INDEX ON ratings (tconst)")
+    cur.execute("CREATE INDEX ON name_basics (nconst)")
+    cur.execute("CREATE INDEX ON title_subtitles (titleId, index_)")
+
     conn.commit()
     cur.close()
