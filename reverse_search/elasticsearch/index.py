@@ -12,8 +12,12 @@ def bulk_index_to_elasticsearch():
     name_basics_filepath = os.path.abspath("datasets/exports/name.basics.csv")
 
     # cur = conn.cursor()
-    # cur.execute("COPY (SELECT titleId, title FROM title_akas) TO '{}' WITH CSV".format(title_akas_filepath))
-    # cur.execute("COPY (SELECT nconst, primaryName FROM name_basics) TO '{}' WITH CSV".format(name_basics_filepath))
+    # cur.execute(
+    #     "COPY (SELECT titleId, title FROM title_akas) TO '{}' WITH CSV HEADER".format(title_akas_filepath)
+    # )
+    # cur.execute(
+    #     "COPY (SELECT nconst, primaryName FROM name_basics) TO '{}' WITH CSV HEADER".format(name_basics_filepath)
+    # )
 
     client.bulk_index_from_csv(title_akas_filepath, index="title_akas")
     client.bulk_index_from_csv(name_basics_filepath, index="name_basics")
