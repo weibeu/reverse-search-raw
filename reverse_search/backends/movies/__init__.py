@@ -16,7 +16,7 @@ def index_movie_subtitle(title_id, path):
         )
         elasticsearch_objects.append(dict(
             _index="title_subtitles",
-            titleId=title_id, index_=sub.index, dialogue=sub.text_without_tags
+            titleId=title_id, index_=sub.index, dialogue=sub.text_without_tags.replace("\n", " ")
         ))
     conn.commit()
     cur.close()
