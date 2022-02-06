@@ -3,3 +3,4 @@ elasticsearch
 Flask
 pysrt
 flask-cors
+psycopg2-binary
