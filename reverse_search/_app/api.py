@@ -1,6 +1,7 @@
 from flask import Blueprint, request, abort, jsonify
 
 import functools
+import collections
 
 from ..elasticsearch import client
 from ..backends.movies.db import get_movie_details, get_subtitle_meta
@@ -48,7 +49,10 @@ def search_subtitles(query):
 def search_movies(query):
     hits = client.get_hits("title_akas", title=query)
     hits.sort(key=lambda h: h['_score'], reverse=True)
-    data = [get_movie_details(h['_source']['titleid']) for h in hits]
+    data = list(collections.OrderedDict(**{
+        h['_source']['titleid']: get_movie_details(h['_source']['titleid'])
+        for h in hits
+    }).values())
     return jsonify(data)
 
 
