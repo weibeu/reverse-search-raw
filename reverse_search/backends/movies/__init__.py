@@ -1,5 +1,6 @@
 from ...elasticsearch import client
 from ...db import conn
+from ...utils import cache_posters
 
 import pysrt
 import elasticsearch.helpers
@@ -31,3 +32,6 @@ def index_movie_subtitle(title_id, path):
     conn.commit()
     cur.close()
     elasticsearch.helpers.bulk(client, elasticsearch_objects)
+
+    poster_path = cache_posters(title_id)
+    print(f"Title poster successfully written to '{poster_path}'.")
