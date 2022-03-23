@@ -64,4 +64,4 @@ def cache_posters(title_id):
 
 
 def get_cached_poster_url(title_id):
-    return url_for("static", filename=f"posters/{title_id}.png")
+    return url_for("static", filename=f"posters/{title_id}.png", _external=True)
