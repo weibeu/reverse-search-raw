@@ -8,7 +8,11 @@ blueprints = [api.bp, ]
 
 
 def create_app(config=None):
-    app = Flask(__name__)
+    app = Flask(
+        __name__,
+        static_url_path=config.STATIC_URL_PATH,
+        static_folder=config.STATIC_DIR_PATH,
+    )
     CORS(app)
 
     if config is not None:

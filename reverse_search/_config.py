@@ -20,8 +20,8 @@ class BaseConfig(object):
         "hosts": ["127.0.0.1:9200", ],
     }
     TMDB_ACCESS_TOKEN = os.getenv("TMDB_ACCESS_TOKEN")
-    STATIC_URL_PATH = ""
-    STATIC_DIR_PATH = "reverse_search/_app/static"
+    STATIC_URL_PATH = "/static"
+    STATIC_DIR_PATH = os.path.abspath("reverse_search/_app/static")
     POSTERS_BASE_PATH = STATIC_DIR_PATH + "/posters"
 
 

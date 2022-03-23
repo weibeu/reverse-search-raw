@@ -1,3 +1,4 @@
+from ...utils import get_cached_poster_url
 from ...db import conn
 
 import psycopg2.extras
@@ -48,6 +49,8 @@ def get_movie_details(title_id):
     movie_details['titleAKAS'] = cur.fetchall()
 
     cur.close()
+
+    movie_details["poster"] = get_cached_poster_url(title_id)
     return movie_details
 
 

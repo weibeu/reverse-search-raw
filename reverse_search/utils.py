@@ -5,6 +5,8 @@ import os
 import sys
 import requests
 
+from flask import url_for
+
 
 maxInt = sys.maxsize
 
@@ -59,3 +61,7 @@ def cache_posters(title_id):
         pf.write(response.content)
 
     return poster_path
+
+
+def get_cached_poster_url(title_id):
+    return url_for("static", filename=f"posters/{title_id}.png")
