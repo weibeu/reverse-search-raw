@@ -1,6 +1,7 @@
 from ...utils import get_cached_poster_url
 from ...db import conn
 
+import collections
 import psycopg2.extras
 
 
@@ -47,6 +48,33 @@ def get_movie_details(title_id):
         (title_id, )
     )
     movie_details['titleAKAS'] = cur.fetchall()
+    cur.execute(
+        """
+        SELECT primaryName, birthyear, primaryProfession, category, characters, knownForTitles
+        FROM principals JOIN name_basics ON principals.nconst=name_basics.nconst
+        WHERE tconst=%s
+        ORDER BY ordering
+        """,
+        (title_id, )
+    )
+    movie_details['cast'] = cur.fetchall()
+    cur.execute(
+        """
+        SELECT title_basics.tconst, originalTitle
+        FROM title_basics JOIN ratings ON title_basics.tconst=ratings.tconst
+        WHERE title_basics.tconst IN %s
+        ORDER BY averagerating DESC
+        """,
+        (tuple(tid for c in movie_details["cast"] for tid in c["knownfortitles"].split(",")), )
+    )
+    id_title_map = collections.OrderedDict(((r["tconst"], r["originaltitle"]) for r in cur.fetchall()))
+    for cast in movie_details["cast"]:
+        try:
+            characters = eval(cast["characters"])
+            cast["characters"] = characters[0]
+        except (SyntaxError, IndexError, TypeError):
+            cast["characters"] = None
+        cast["knownfortitles"] = [tn for tid, tn in id_title_map.items() if tid in cast["knownfortitles"].split(",")]
 
     cur.close()
 
