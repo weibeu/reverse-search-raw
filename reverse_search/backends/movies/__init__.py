@@ -11,6 +11,14 @@ def index_movie_subtitle(title_id, path):
     cur = conn.cursor()
 
     cur.execute(
+        """SELECT title_basics.tconst FROM title_basics WHERE tconst=%s""",
+        (title_id, )
+    )
+    if cur.fetchone() is None:
+        print("No data registered for specified title ID.")
+        return
+
+    cur.execute(
         """SELECT title_subtitles.titleid FROM title_subtitles WHERE titleId=%s""",
         (title_id, )
     )
