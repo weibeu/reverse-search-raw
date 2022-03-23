@@ -60,7 +60,7 @@ def get_subtitle_meta(title_id, index_, span=3):
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute(
         """
-        SELECT start_, end_, dialogue
+        SELECT index_, start_, end_, dialogue
         FROM title_subtitles
         WHERE titleId=%s AND index_>=%s AND index_<=%s;
         """,
@@ -69,4 +69,9 @@ def get_subtitle_meta(title_id, index_, span=3):
     results = cur.fetchall()
 
     cur.close()
+
+    for r in results:
+        r["is_key_phrase"] = r["index_"] == index_
+        r.pop("index_")
+
     return results
