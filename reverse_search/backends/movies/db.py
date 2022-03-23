@@ -74,4 +74,4 @@ def get_subtitle_meta(title_id, index_, span=3):
         r["is_key_phrase"] = r["index_"] == index_
         r.pop("index_")
 
-    return results
+    return [r for r in results if not ("(" in r["dialogue"] and ")" in r["dialogue"])]
