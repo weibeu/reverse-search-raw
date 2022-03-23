@@ -8,6 +8,16 @@ import elasticsearch.helpers
 def index_movie_subtitle(title_id, path):
     subs = pysrt.open(path)
     cur = conn.cursor()
+
+    cur.execute(
+        """SELECT title_subtitles.titleid FROM title_subtitles WHERE titleId=%s""",
+        (title_id, )
+    )
+    if cur.fetchone() is not None:
+        print("Subtitle is already registered for specified title ID.")
+        cur.close()
+        return
+
     elasticsearch_objects = list()
     for sub in subs:
         cur.execute(
