@@ -77,7 +77,11 @@ def get_movie_details(title_id):
             cast["characters"] = characters[0]
         except (SyntaxError, IndexError, TypeError):
             cast["characters"] = None
-        cast["knownfortitles"] = [tn for tid, tn in id_title_map.items() if tid in cast["knownfortitles"].split(",")]
+        cast["knownfortitles"] = [
+            tn for tid, tn in id_title_map.items()
+            if tid in cast["knownfortitles"].split(",")
+            and tid != title_id
+        ]
 
     cur.close()
 
