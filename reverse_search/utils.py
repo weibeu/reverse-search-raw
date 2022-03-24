@@ -35,11 +35,15 @@ def csv_from_tsv(filename, output_filename):
 
 
 def cache_posters(title_id):
+    poster_path = os.path.join(config.POSTERS_BASE_PATH, f"{title_id}.png")
+    if os.path.exists(poster_path):
+        return poster_path
+
     headers = {"Authorization": f"Bearer {config.TMDB_ACCESS_TOKEN}"}
     params = {"external_source": "imdb_id"}
     response = requests.get(
         f"https://api.themoviedb.org/3/find/{title_id}",
-        params=params, headers=headers,
+        params=params, headers=headers, timeout=10,
     )
     if not response.ok:
         return
@@ -47,16 +51,15 @@ def cache_posters(title_id):
     title_data = data["movie_results"] or data["tv_results"]
     if not title_data:
         return
-    poster_path = title_data[0]["backdrop_path"] or title_data[0]["poster_path"]
-    if not poster_path:
+    poster_url = title_data[0]["backdrop_path"] or title_data[0]["poster_path"]
+    if not poster_url:
         return
 
-    poster_url = f"https://image.tmdb.org/t/p/original/{poster_path}"
-    response = requests.get(poster_url)
+    poster_url = f"https://image.tmdb.org/t/p/original/{poster_url}"
+    response = requests.get(poster_url, timeout=10)
     if not response.ok:
         return
 
-    poster_path = os.path.join(config.POSTERS_BASE_PATH, f"{title_id}.png")
     with open(poster_path, "wb") as pf:
         pf.write(response.content)
 

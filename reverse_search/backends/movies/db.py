@@ -1,6 +1,7 @@
-from ...utils import get_cached_poster_url
+from ...utils import get_cached_poster_url, cache_posters
 from ...db import conn
 
+import logging
 import collections
 import psycopg2.extras
 
@@ -77,6 +78,11 @@ def get_movie_details(title_id):
         cast["knownfortitles"] = [tn for tid, tn in id_title_map.items() if tid in cast["knownfortitles"].split(",")]
 
     cur.close()
+
+    try:
+        cache_posters(title_id)
+    except Exception as exc:
+        logging.exception(exc)
 
     movie_details["poster"] = get_cached_poster_url(title_id)
     return movie_details
