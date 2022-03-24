@@ -20,6 +20,8 @@ def get_movie_details(title_id):
         (title_id, )
     )
     movie_details = cur.fetchone()
+    if movie_details is None:
+        return movie_details
     movie_details['directors'] = movie_details['directors'] or str()
     movie_details['writers'] = movie_details['writers'] or str()
     cur.execute(
