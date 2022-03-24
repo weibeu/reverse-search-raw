@@ -48,11 +48,15 @@ def search_subtitles(query):
 @ensure_search_query
 def search_movies(query):
     hits = client.get_hits("title_akas", title=query)
-    hits.sort(key=lambda h: h['_score'], reverse=True)
-    data = list(collections.OrderedDict(**{
-        h['_source']['titleid']: get_movie_details(h['_source']['titleid'])
-        for h in hits
-    }).values())
+    title_id_movie_data_map = collections.OrderedDict()
+    for h_ in hits:
+        movie_data = get_movie_details(h_['_source']['titleid'])
+        if movie_data is None:
+            continue
+        movie_data["_score"] = h_["_score"] * (movie_data["numvotes"] or 1) * (movie_data["averagerating"] or 1)
+        title_id_movie_data_map[h_['_source']['titleid']] = movie_data
+    data = list(title_id_movie_data_map.values())
+    data.sort(key=lambda d: d["_score"], reverse=True)
     return jsonify(data)
 
 
